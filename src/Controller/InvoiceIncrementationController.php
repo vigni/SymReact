@@ -18,6 +18,5 @@ class InvoiceIncrementationController {
     {
         $data->setChrono($data->getChrono() + 1);
         $this->entityManager->flush();
-        dd($data);
     }
 }
