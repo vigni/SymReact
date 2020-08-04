@@ -31,7 +31,7 @@ const App = () => {
 
 			<main className="container pt-5">
 					<Switch>
-						<Route path="/customers" component={CustomersPage} />
+						<Route path="/customers" component={CustomersPageWithPagination} />
 						<Route path="/invoices" component={InvoicesPage} />
 						<Route path="/" component={HomePage} />
 					</Switch>
