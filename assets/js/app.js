@@ -1,12 +1,15 @@
-import React from 'react';
+import React, { useState } from "react";
 import ReactDOM from "react-dom";
-import Navbar from './components/Navbar';
-import '../css/app.css';
-import HomePage from './pages/Homepage';
-import { HashRouter, Switch, Route } from "react-router-dom"
-import CustomersPage from './pages/CustomersPage';
-import CustomersPageWithPagination from './pages/CustomersPageWithPagination';
-import InvoicesPage from './pages/InvoicesPage';
+import Navbar from "./components/Navbar";
+import "../css/app.css";
+import HomePage from "./pages/Homepage";
+import { HashRouter, Switch, Route, withRouter } from "react-router-dom";
+import CustomersPage from "./pages/CustomersPage";
+import InvoicesPage from "./pages/InvoicesPage";
+import LoginPage from "./pages/LoginPage";
+import AuthAPI from "./services/authAPI";
+import AuthContext from "./contexts/AuthContext";
+import PrivateRoute from "./components/PrivateRoute";
 
 /*
  * Welcome to your app's main JavaScript file!
@@ -17,29 +20,39 @@ import InvoicesPage from './pages/InvoicesPage';
 
 // any CSS you import will output into a single css file (app.css in this case)
 
-
-
 // Need jQuery? Install it with "yarn add jquery", then uncomment to import it.
 // import $ from 'jquery';
 
-console.log('Hello Webpack Encore! Edit me in assets/js/app.js !');
+AuthAPI.setup();
 
 const App = () => {
-	return (
-		<HashRouter>
-			<Navbar />
+  const [isAuthenticated, setIsAuthenticated] = useState(
+    AuthAPI.isAuthenticated()
+  );
+  const NavbarWithRouter = withRouter(Navbar);
 
-			<main className="container pt-5">
-					<Switch>
-						<Route path="/customers" component={CustomersPageWithPagination} />
-						<Route path="/invoices" component={InvoicesPage} />
-						<Route path="/" component={HomePage} />
-					</Switch>
-			</main>
-		</ HashRouter>
-	);
+  return (
+    <AuthContext.Provider
+      value={{
+        isAuthenticated,
+        setIsAuthenticated,
+      }}
+    >
+      <HashRouter>
+        <NavbarWithRouter />
+        <main className="container pt-5">
+          <Switch>
+            <Route path="/login" component={LoginPage} />
+            <PrivateRoute path="/customers" component={CustomersPage} />
+            <PrivateRoute path="/invoices" component={InvoicesPage} />
+            <Route path="/" component={HomePage} />
+          </Switch>
+        </main>
+      </HashRouter>
+    </AuthContext.Provider>
+  );
 };
 
-const rootElement = document.querySelector('#app');
+const rootElement = document.querySelector("#app");
 
 ReactDOM.render(<App />, rootElement);
