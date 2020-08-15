@@ -1,19 +1,20 @@
 import moment from "moment";
-import React, { useEffect, useState } from 'react';
-import Pagination from '../components/Pagination';
+import React, { useEffect, useState } from "react";
+import Pagination from "../components/Pagination";
 import InvoicesAPI from "../services/invoicesAPI";
+import { Link } from "react-router-dom";
 
 const STATUS_CLASSES = {
   PAID: "success",
   SENT: "primary",
-  CANCELLED: "danger"
-}
+  CANCELLED: "danger",
+};
 
 const STATUS_LABEL = {
   PAID: "Payée",
   SENT: "Envoyée",
-  CANCELLED: "Annulée"
-}
+  CANCELLED: "Annulée",
+};
 
 const InvoicesPage = (props) => {
   const [invoices, setInvoices] = useState([]);
@@ -26,59 +27,72 @@ const InvoicesPage = (props) => {
       const data = await InvoicesAPI.findAll();
       setInvoices(data);
     } catch (error) {
-      console.log(error.response)
+      console.log(error.response);
     }
-    
-  }
+  };
 
   // Fetch the invoices when the component is loaded
   useEffect(() => {
     fetchInvoices();
-  }, [])
+  }, []);
 
   // Manage change page
   const handlePageChanged = (page) => setCurrentPage(page);
-  
+
   // Manage search
-  const handleSearch = ({currentTarget}) => {
+  const handleSearch = ({ currentTarget }) => {
     setSearch(currentTarget.value);
     setCurrentPage(1);
-  }
+  };
 
-  // Manage delete customer 
-  const handleDelete = async id => {
+  // Manage delete customer
+  const handleDelete = async (id) => {
     const originalInvoices = [...invoices];
 
-    setInvoices(invoices.filter(invoice => invoice.id !== id))
+    setInvoices(invoices.filter((invoice) => invoice.id !== id));
 
     try {
       await InvoicesAPI.delete(id);
     } catch (error) {
-      console.log(error.response)
+      console.log(error.response);
       setInvoices(originalInvoices);
     }
   };
 
-
   // Filter invoices according to the search
   const filteredInvoices = invoices.filter(
-    i => 
+    (i) =>
       i.customer.lastName.toLowerCase().includes(search.toLocaleLowerCase()) ||
       i.customer.firstName.toLowerCase().includes(search.toLocaleLowerCase()) ||
       i.amount.toString().startsWith(search.toLowerCase()) ||
       STATUS_LABEL[i.status].toLowerCase().includes(search.toLowerCase())
   );
 
-  const paginatedInvoices = Pagination.getData(filteredInvoices, currentPage, itemsPerPage);
-  
+  const paginatedInvoices = Pagination.getData(
+    filteredInvoices,
+    currentPage,
+    itemsPerPage
+  );
+
   // Manage the date
-  const formatDate = (str) => moment(str).format('DD/MM/YYYY');
-  
-  return ( 
+  const formatDate = (str) => moment(str).format("DD/MM/YYYY");
+
+  return (
     <>
-      <h1>Liste des factures </h1> 
+      <div className="d-flex justify-content-between align-items-center">
+        <h1>Liste des factures</h1>
+        <Link className="btn btn-primary" to="/invoices/new">
+          Créer une facture
+        </Link>
+      </div>
       <div className="form-group">
-        <input type="text" onChange={handleSearch} value={search} className="form-control" placeholder="Rechercher..."/>
+        <input
+          type="text"
+          onChange={handleSearch}
+          value={search}
+          className="form-control"
+          placeholder="Rechercher..."
+        />
       </div>
       <table className="table table-hover">
         <thead>
@@ -92,30 +106,52 @@ const InvoicesPage = (props) => {
           </tr>
         </thead>
         <tbody>
-          {paginatedInvoices.map(invoice => 
-            <tr key = {invoice.id }>
+          {paginatedInvoices.map((invoice) => (
+            <tr key={invoice.id}>
               <td>{invoice.chrono}</td>
               <td>
-                <a href="">{invoice.customer.firstName} {invoice.customer.lastName}</a>  
+                <a href="">
+                  {invoice.customer.firstName} {invoice.customer.lastName}
+                </a>
               </td>
               <td className="text-center">{formatDate(invoice.sentAt)}</td>
-              <td className="text-center"> 
-                <span className={"badge badge-" + STATUS_CLASSES[invoice.status]}>{STATUS_LABEL[invoice.status]}</span>
+              <td className="text-center">
+                <span
+                  className={"badge badge-" + STATUS_CLASSES[invoice.status]}
+                >
+                  {STATUS_LABEL[invoice.status]}
+                </span>
               </td>
-              <td className="text-center">{invoice.amount.toLocalString}</td>
+              <td className="text-center">
+                {invoice.amount.toLocaleString()} €
+              </td>
               <td>
-                <button className="btn btn-sm btn-primary mr-1">Editer</button>
-                <button className="btn btn-sm btn-danger" onClick= {() => handleDelete(invoice.id)}>Supprimer</button>
+                <Link
+                  to={"/invoices/" + invoice.id}
+                  className="btn btn-sm btn-primary mr-1"
+                >
+                  Editer
+                </Link>
+                <button
+                  className="btn btn-sm btn-danger"
+                  onClick={() => handleDelete(invoice.id)}
+                >
+                  Supprimer
+                </button>
               </td>
-            </tr> )}
-
+            </tr>
+          ))}
         </tbody>
       </table>
 
-      < Pagination currentPage={currentPage} itemsPerPage={itemsPerPage} onPageChanged={handlePageChanged}
-      length={filteredInvoices.length} />
+      <Pagination
+        currentPage={currentPage}
+        itemsPerPage={itemsPerPage}
+        onPageChanged={handlePageChanged}
+        length={filteredInvoices.length}
+      />
     </>
-    );
-}
- 
+  );
+};
+
 export default InvoicesPage;

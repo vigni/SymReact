@@ -3,6 +3,12 @@
     "@babel/preset-react": "^7.0.0",
     "@symfony/webpack-encore": "^0.30.0",
     "core-js": "^3.0.0",
+    "eslint-config-airbnb": "^18.2.0",
+    "eslint-config-airbnb-base": "^14.2.0",
+    "eslint-plugin-import": "^2.22.0",
+    "eslint-plugin-jsx-a11y": "^6.3.1",
+    "eslint-plugin-react": "^7.20.5",
+    "eslint-plugin-react-hooks": "^4.0.8",
     "regenerator-runtime": "^0.13.2",
     "webpack-notifier": "^1.6.0"
   },
@@ -21,5 +27,22 @@
     "react": "^16.8.6",
     "react-dom": "^16.8.6",
     "react-router-dom": "^5.0.0"
-  }
+  },
+  "name": "api-course",
+  "version": "1.0.0",
+  "main": "webpack.config.js",
+  "directories": {
+    "test": "tests"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/vigni/SymReact.git"
+  },
+  "keywords": [],
+  "author": "",
+  "bugs": {
+    "url": "https://github.com/vigni/SymReact/issues"
+  },
+  "homepage": "https://github.com/vigni/SymReact#readme",
+  "description": ""
 }

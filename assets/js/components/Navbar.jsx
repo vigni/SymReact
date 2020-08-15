@@ -16,7 +16,7 @@ const Navbar = ({ history }) => {
       <NavLink className="navbar-brand" to="/">
         SymReact
       </NavLink>
-      <button
+      {/* <button
         className="navbar-toggler"
         type="button"
         data-toggle="collapse"
@@ -26,7 +26,7 @@ const Navbar = ({ history }) => {
         aria-label="Toggle navigation"
       >
         <span className="navbar-toggler-icon"></span>
-      </button>
+      </button> */}
 
       <div className="collapse navbar-collapse" id="navbarColor03">
         <ul className="navbar-nav mr-auto">
