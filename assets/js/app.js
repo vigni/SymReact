@@ -13,6 +13,8 @@ import AuthContext from "./contexts/AuthContext";
 import PrivateRoute from "./components/PrivateRoute";
 import InvoicePage from "./pages/InvoicePage";
 import RegisterPage from "./pages/RegisterPage";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 /*
  * Welcome to your app's main JavaScript file!
@@ -56,6 +58,7 @@ const App = () => {
           </Switch>
         </main>
       </HashRouter>
+      <ToastContainer />
     </AuthContext.Provider>
   );
 };
