@@ -16,6 +16,8 @@ const CustomersPage = (props) => {
       setCustomers(data);
       setLoading(false);
     } catch (error) {
+      console.log("error:", error);
+
       toast.error("Impossible de charger les clients");
     }
   };
@@ -33,6 +35,7 @@ const CustomersPage = (props) => {
 
     try {
       await CustomersAPI.delete(id);
+      toast.success("Le client à bien été supprimer");
     } catch (error) {
       setCustomers(originalCustomers);
       toast.error("La suppression du client à échouée");

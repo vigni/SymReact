@@ -78,7 +78,7 @@ const InvoicePage = ({ history, match }) => {
         await InvoicesAPI.update(id, invoice);
         toast.success("La facture a bien été modifiée");
       } else {
-        const response = await InvoicesAPI.create(id); //flash notif succes
+        await InvoicesAPI.create(invoice);
         history.replace("/invoices");
         toast.success("La facture a bien été crée");
       }
